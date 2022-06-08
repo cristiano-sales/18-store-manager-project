@@ -13,4 +13,10 @@ route.get('/:id', async (req, res) => {
   return res.status(200).json(response);
 });
 
+route.post('/', async (req, res) => {
+  const array = req.body;
+  const response = await salesService.postSale(array);
+  return res.status(201).json(response);
+});
+
 module.exports = route;

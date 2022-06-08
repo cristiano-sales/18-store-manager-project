@@ -1,5 +1,6 @@
 const route = require('express').Router();
 const productsService = require('../services/Products');
+const middlewares = require('../middlewares');
 
 route.get('/', async (req, res) => {
   const response = await productsService.getAllProducts();
@@ -13,7 +14,7 @@ route.get('/:id', async (req, res) => {
   return res.status(200).json(response);
 });
 
-route.post('/', async (req, res) => {
+route.post('/', middlewares.productNameQuantity, async (req, res) => {
   const { name, quantity } = req.body;
   const allProducts = (await productsService.getAllProducts()).find(({ name: n }) => n === name);
   if (allProducts) return res.status(409).json({ message: 'Product already exists' });
@@ -21,7 +22,7 @@ route.post('/', async (req, res) => {
   return res.status(201).json(response);
 });
 
-route.put('/:id', async (req, res) => {
+route.put('/:id', middlewares.productNameQuantity, async (req, res) => {
   const { name, quantity } = req.body;
   const { id } = req.params;
   const response = await productsService.putProduct(name, +quantity, id);

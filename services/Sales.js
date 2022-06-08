@@ -28,7 +28,13 @@ const getSaleById = async (id) => {
   return sequelizeById(response);
 };
 
+const postSale = async (salesArray) => {
+  const response = await Sales.postSale(salesArray);
+  return response;
+};
+
 module.exports = {
   getAllSales,
   getSaleById,
+  postSale,
 };

@@ -25,7 +25,29 @@ const getById = async (id) => {
   return sale;
 };
 
+const postSale = async (salesArray) => {
+  const querySale = `
+  INSERT INTO StoreManager.sales (date) VALUE
+  (NOW());
+  `;
+  await connection.execute(querySale);
+  const getSaleId = `
+  SELECT max(id) FROM sales;
+  `;
+  const [[maxId]] = await connection.execute(getSaleId);
+  const saleId = maxId['max(id)'];
+  const querySaleProducts = `
+  INSERT INTO sales_products (sale_id, product_id, quantity) VALUE
+  (?, ?, ?);
+  `;
+  salesArray.forEach(async (_, index) => {
+       const { productId, quantity } = salesArray[index];
+       await connection.execute(querySaleProducts, [saleId, productId, quantity]);
+  }); return { id: saleId, itemsSold: salesArray };
+};
+
 module.exports = {
   getAll,
   getById,
+  postSale,
 };
