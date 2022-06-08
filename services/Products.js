@@ -10,7 +10,13 @@ const getProductById = async (id) => {
   return response;
 };
 
+const postProduct = async (name, quantity) => {
+  const response = await Products.postProduct(name, quantity);
+  return response;
+};
+
 module.exports = {
   getAllProducts,
   getProductById,
+  postProduct,
 };
