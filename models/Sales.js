@@ -46,8 +46,20 @@ const postSale = async (salesArray) => {
   }); return { id: saleId, itemsSold: salesArray };
 };
 
+const putSale = async (salesArray, id) => {
+  const saleId = +id;
+  const { quantity, productId } = salesArray[0];
+  const query = `
+  UPDATE sales_products
+  SET quantity = ?
+  WHERE product_id = ? AND sale_id = ${saleId};
+  `;
+  await connection.execute(query, [quantity, productId]);
+};
+
 module.exports = {
   getAll,
   getById,
   postSale,
+  putSale,
 };

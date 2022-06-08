@@ -11,14 +11,14 @@ const productNameQuantity = (req, res, next) => {
 
   //
 
-  if (!quantity) {
-    res.status(400).json({ message: '"quantity" is required' });
-    return;
-  } if (quantity < 1) {
+  if (quantity < 1) {
     res.status(422).json({
        message: '"quantity" must be greater than or equal to 1' });
     return; 
-} next();
+  } if (!quantity) {
+    res.status(400).json({ message: '"quantity" is required' });
+    return;
+  } next();
 };
 
 module.exports = productNameQuantity;

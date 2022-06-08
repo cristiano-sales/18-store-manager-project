@@ -33,8 +33,20 @@ const postSale = async (salesArray) => {
   return response;
 };
 
+const putSale = async (salesArray, id) => {
+  try {
+    await Sales.putSale(salesArray, id);
+  } catch (error) {
+    throw new Error({ message: error });
+  }
+  const saleId = id;
+  const responseBody = { saleId, itemUpdated: salesArray };
+  return responseBody;
+};
+
 module.exports = {
   getAllSales,
   getSaleById,
   postSale,
+  putSale,
 };
