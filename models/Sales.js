@@ -57,9 +57,17 @@ const putSale = async (salesArray, id) => {
   await connection.execute(query, [quantity, productId]);
 };
 
+const deleteSale = async (id) => {
+  const deleteQuery = `
+  DELETE FROM sales WHERE id = ?;
+  `;
+  await connection.execute(deleteQuery, [id]);
+};
+
 module.exports = {
   getAll,
   getById,
   postSale,
   putSale,
+  deleteSale,
 };

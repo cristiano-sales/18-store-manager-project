@@ -44,9 +44,18 @@ const putSale = async (salesArray, id) => {
   return responseBody;
 };
 
+const deleteSale = async (id) => {
+  const sale = await Sales.getById(id);
+  if (sale.length < 1) return null;
+
+  await Sales.deleteSale(id);
+  return true;
+};
+
 module.exports = {
   getAllSales,
   getSaleById,
   postSale,
   putSale,
+  deleteSale,
 };
