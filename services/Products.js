@@ -1,17 +1,22 @@
 const Products = require('../models/Products');
 
-const getAllProducts = async () => {
-  const response = await Products.getAll();
+const getAllProducts = () => {
+  const response = Products.getAll();
   return response;
 };
 
-const getProductById = async (id) => {
-  const response = await Products.getById(id);
+const getProductById = (id) => {
+  const response = Products.getById(id);
   return response;
 };
 
-const postProduct = async (name, quantity) => {
-  const response = await Products.postProduct(name, quantity);
+const postProduct = (name, quantity) => {
+  const response = Products.postProduct(name, quantity);
+  return response;
+};
+
+const putProduct = (name, quantity, id) => {
+  const response = Products.putProduct(name, quantity, id);
   return response;
 };
 
@@ -19,4 +24,5 @@ module.exports = {
   getAllProducts,
   getProductById,
   postProduct,
+  putProduct,
 };
