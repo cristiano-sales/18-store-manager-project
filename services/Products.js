@@ -20,9 +20,15 @@ const putProduct = (name, quantity, id) => {
   return response;
 };
 
+const deleteProduct = (id) => {
+  const response = Products.deleteProduct(id);
+  return response;
+};
+
 module.exports = {
   getAllProducts,
   getProductById,
   postProduct,
   putProduct,
+  deleteProduct,
 };
