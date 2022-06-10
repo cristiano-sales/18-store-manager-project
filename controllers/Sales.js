@@ -20,7 +20,7 @@ route.post('/', middlewares.sales, async (req, res) => {
   return res.status(201).json(response);
 });
 
-route.put('/:id', async (req, res) => {
+route.put('/:id', middlewares.sales, async (req, res) => {
   const salesArray = req.body;
   const { id } = req.params;
   const response = await salesService.putSale(salesArray, id);
