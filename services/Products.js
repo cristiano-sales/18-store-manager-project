@@ -15,14 +15,20 @@ const postProduct = (name, quantity) => {
   return response;
 };
 
-const putProduct = (name, quantity, id) => {
-  const response = Products.putProduct(name, quantity, id);
-  return response;
+const putProduct = async (name, quantity, id) => {
+  const product = await Products.getById(id);
+  if (!product) return null;
+
+  await Products.putProduct(name, quantity, id);
+  return { id, name, quantity };
 };
 
-const deleteProduct = (id) => {
-  const response = Products.deleteProduct(id);
-  return response;
+const deleteProduct = async (id) => {
+  const product = await Products.getById(id);
+  if (!product) return null;
+
+  await Products.deleteProduct(id);
+  return true;
 };
 
 module.exports = {
