@@ -22,7 +22,6 @@ const updateQuantity = async (quantity, id) => {
   const { quantity: productQuantity } = await Products.getById(id);
   let newQuantity;
   if (productQuantity > quantity) newQuantity = productQuantity - quantity;
-  if (productQuantity < quantity) throw Error({ message: 'Insufficient products' });
   if (productQuantity === quantity) newQuantity = 0;
   await Products.updateQuantity(newQuantity, id);
 };
@@ -30,7 +29,6 @@ const updateQuantity = async (quantity, id) => {
 const updateQuantityDelete = async (quantity, id) => {
   const { quantity: productQuantity } = await Products.getById(id);
   const newQuantity = productQuantity + quantity;
-  console.log(newQuantity);
   await Products.updateQuantity(newQuantity, id);
 };
 
@@ -48,13 +46,17 @@ const getSaleById = async (id) => {
 const postSale = async (salesArray) => {
   const id = await Sales.postSale();
 
-  const insertProductsPromisses = [];
+  const insertProductsPromises = [];
+  const error = salesArray.some(({ productId, quantity }) => productId < quantity);
+  if (error) return false;
+
   salesArray.forEach(async (_, index) => {
     const { productId, quantity } = salesArray[index];
-    await updateQuantity(quantity, productId);
-    insertProductsPromisses.push(Sales.addSalesProducts(id, productId, quantity));
-});
-  Promise.all(insertProductsPromisses);
+          await updateQuantity(quantity, productId);
+      insertProductsPromises.push(Sales.addSalesProducts(id, productId, quantity));      
+  });
+
+  Promise.all(insertProductsPromises);
   return { id, itemsSold: salesArray };
 };
 
