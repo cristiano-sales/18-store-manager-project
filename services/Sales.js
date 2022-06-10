@@ -29,8 +29,15 @@ const getSaleById = async (id) => {
 };
 
 const postSale = async (salesArray) => {
-  const response = await Sales.postSale(salesArray);
-  return response;
+  const id = await Sales.postSale();
+
+  const insertProductsPromisses = [];
+  salesArray.forEach(async (_, index) => {
+    const { productId, quantity } = salesArray[index];
+    insertProductsPromisses.push(Sales.addSalesProducts(id, productId, quantity));
+}); 
+  await Promise.all(insertProductsPromisses);
+  return { id, itemsSold: salesArray };
 };
 
 const putSale = async (salesArray, id) => {
