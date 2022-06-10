@@ -35,8 +35,8 @@ const postSale = async (salesArray) => {
   salesArray.forEach(async (_, index) => {
     const { productId, quantity } = salesArray[index];
     insertProductsPromisses.push(Sales.addSalesProducts(id, productId, quantity));
-}); 
-  await Promise.all(insertProductsPromisses);
+});
+  Promise.all(insertProductsPromisses);
   return { id, itemsSold: salesArray };
 };
 

@@ -24,7 +24,7 @@ route.put('/:id', middlewares.sales, async (req, res) => {
   const salesArray = req.body;
   const { id } = req.params;
   const response = await salesService.putSale(salesArray, id);
-  if (!response) return res.status(404).json({ message: 'Product not found' });
+  if (!response) return res.status(404).json({ message: 'Sale not found' });
   return res.status(200).json(response);
 });
 
