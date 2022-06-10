@@ -14,6 +14,11 @@ route.get('/:id', async (req, res) => {
   return res.status(200).json(response);
 });
 
+const getAll = async (req, res) => {
+  const response = await productsService.getAllProducts();
+  return res.status(202).json(response);
+};
+
 route.post('/', middlewares.productNameQuantity, async (req, res) => {
   const { name, quantity } = req.body;
   const allProducts = (await productsService.getAllProducts()).find(({ name: n }) => n === name);
@@ -37,4 +42,4 @@ route.delete('/:id', async (req, res) => {
   return res.status(204).end();
 });
 
-module.exports = route;
+module.exports = { route, getAll };

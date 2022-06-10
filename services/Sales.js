@@ -43,17 +43,27 @@ const getSaleById = async (id) => {
   return sequelizeById(response);
 };
 
+const quantityError = async (salesArray) => {
+  const checkQuantity = salesArray.map(async ({ quantity, productId }) => {
+    const product = await Products.getById(productId);
+    return product.quantity > quantity;
+});
+  let error = false;
+  await Promise.all(checkQuantity).then((value) => {
+    if (value.includes(false)) error = true;
+}); 
+  return error;
+};
+
 const postSale = async (salesArray) => {
+  const error = await quantityError(salesArray);
+  if (error) return { error };
   const id = await Sales.postSale();
-
   const insertProductsPromises = [];
-  const error = salesArray.some(({ productId, quantity }) => productId < quantity);
-  if (error) return false;
 
-  salesArray.forEach(async (_, index) => {
-    const { productId, quantity } = salesArray[index];
-          await updateQuantity(quantity, productId);
-      insertProductsPromises.push(Sales.addSalesProducts(id, productId, quantity));      
+  salesArray.forEach(async ({ productId, quantity }) => {
+    await updateQuantity(quantity, productId);
+    insertProductsPromises.push(Sales.addSalesProducts(id, productId, quantity));      
   });
 
   Promise.all(insertProductsPromises);

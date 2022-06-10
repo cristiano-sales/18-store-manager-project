@@ -17,7 +17,7 @@ route.get('/:id', async (req, res) => {
 route.post('/', middlewares.sales, async (req, res) => {
   const array = req.body;
   const response = await salesService.postSale(array);
-  if (!response) {
+  if (response.error) {
     return res.status(422)
     .json({ message: 'Such amount is not permitted to sell' });
   }
