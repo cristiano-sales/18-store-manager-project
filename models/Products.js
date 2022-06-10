@@ -1,12 +1,11 @@
 const connection = require('./connection');
 
-const getAll = async () => {
+const getAll = () => {
   const query = `
   SELECT * 
   FROM products;
   `;
-  const [response] = await connection.execute(query);
-  return response;
+  return connection.execute(query);
 };
 
 const getById = async (id) => {
