@@ -7,6 +7,11 @@ route.get('/', async (req, res) => {
   return res.status(200).json(response);
 });
 
+const getAll = async (req, res) => {
+  const response = await salesService.getAllSales();
+  return res.status(202).json(response);
+};
+
 route.get('/:id', async (req, res) => {
   const { id } = req.params;
   const response = await salesService.getSaleById(id);
@@ -39,4 +44,4 @@ route.delete('/:id', async (req, res) => {
   return res.status(204).end();
 });
 
-module.exports = route;
+module.exports = { route, getAll };
