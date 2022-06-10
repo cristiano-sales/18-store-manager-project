@@ -1,4 +1,5 @@
 const Sales = require('../models/Sales');
+const Products = require('../models/Products');
 
 const sequelize = (array) => array.map((item) => (
     {
@@ -17,6 +18,22 @@ const sequelize = (array) => array.map((item) => (
     }
 ));
 
+const updateQuantity = async (quantity, id) => {
+  const { quantity: productQuantity } = await Products.getById(id);
+  let newQuantity;
+  if (productQuantity > quantity) newQuantity = productQuantity - quantity;
+  if (productQuantity < quantity) throw Error({ message: 'Insufficient products' });
+  if (productQuantity === quantity) newQuantity = 0;
+  await Products.updateQuantity(newQuantity, id);
+};
+
+const updateQuantityDelete = async (quantity, id) => {
+  const { quantity: productQuantity } = await Products.getById(id);
+  const newQuantity = productQuantity + quantity;
+  console.log(newQuantity);
+  await Products.updateQuantity(newQuantity, id);
+};
+
 const getAllSales = async () => {
   const response = await Sales.getAll();
   return sequelize(response);
@@ -34,6 +51,7 @@ const postSale = async (salesArray) => {
   const insertProductsPromisses = [];
   salesArray.forEach(async (_, index) => {
     const { productId, quantity } = salesArray[index];
+    await updateQuantity(quantity, productId);
     insertProductsPromisses.push(Sales.addSalesProducts(id, productId, quantity));
 });
   Promise.all(insertProductsPromisses);
@@ -54,6 +72,11 @@ const putSale = async (salesArray, id) => {
 const deleteSale = async (id) => {
   const sale = await Sales.getById(id);
   if (sale.length < 1) return null;
+
+  sale.forEach(async (_, index) => {
+    const { product_id, quantity } = sale[index];
+    await updateQuantityDelete(quantity, product_id);
+}); 
 
   await Sales.deleteSale(id);
   return true;

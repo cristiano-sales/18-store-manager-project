@@ -55,7 +55,7 @@ const putSale = async (salesArray, id) => {
 
 const deleteSale = async (id) => {
   const deleteQuery = `
-  DELETE FROM StoreManager.sales WHERE id = ?;
+  DELETE FROM sales WHERE id = ?;
   `;
   await connection.execute(deleteQuery, [id]);
 };

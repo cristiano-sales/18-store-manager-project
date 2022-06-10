@@ -44,6 +44,15 @@ const putProduct = async (name, quantity, id) => {
   await connection.execute(query, [name, quantity, id]);
 };
 
+const updateQuantity = async (newQuantity, id) => {
+  const query = `
+  UPDATE products
+  SET quantity = ?
+  WHERE id = ?;
+  `;
+  await connection.execute(query, [newQuantity, id]);
+};
+
 const deleteProduct = async (id) => {
   const deleteQuery = `
   DELETE FROM products WHERE id = ?;
@@ -57,4 +66,5 @@ module.exports = {
   postProduct,
   putProduct,
   deleteProduct,
+  updateQuantity,
 };

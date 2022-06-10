@@ -10,7 +10,7 @@ const getProductById = (id) => {
   return response;
 };
 
-const postProduct = (name, quantity) => {
+const postProduct = async (name, quantity) => {
   const response = Products.postProduct(name, quantity);
   return response;
 };
