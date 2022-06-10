@@ -1,7 +1,8 @@
-const { route: ProductsController } = require('../controllers/Products');
-const { route: SalesController } = require('../controllers/Sales');
+const routes = require('express').Router();
+const ProductsRouter = require('./Products');
+const SalesRouter = require('./Sales');
 
-module.exports = {
-  ProductsController,
-  SalesController,
-};
+routes.use('/products', ProductsRouter);
+routes.use('/sales', SalesRouter);
+
+module.exports = routes;

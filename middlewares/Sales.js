@@ -1,18 +1,26 @@
+const verifyErrors = (res, next, errorArray) => {
+  if (errorArray[0]) {
+    return res.status(errorArray[0].status).json({ message: errorArray[0].message }); 
+} next();
+};
+
 const Sales = (req, res, next) => {
-  const salesArray = req.body;
-    salesArray.forEach(({ productId, quantity }) => {
+  const errorArray = [];
+    req.body.forEach(({ productId, quantity }) => {
       if (!productId) {
-        return res.status(400).json({ message: '"productId" is required' });
+        errorArray.push({ status: 400, message: '"productId" is required' });
       } 
       if (!quantity) {
-        return res.status(400).json({ message: '"productId" is required' });
+        errorArray.push({ status: 400, message: '"quantity" is required' });
       } 
       if (quantity < 1) {
-        return res.status(422).json({
-           message: '"quantity" must be greater than or equal to 1' });
+        errorArray.push({
+          status: 422,
+          message: '"quantity" must be greater than or equal to 1',
+      });
     }
 });
-  next();
+  verifyErrors(res, next, errorArray);
 };
 
 module.exports = Sales;
