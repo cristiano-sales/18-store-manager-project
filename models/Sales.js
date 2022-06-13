@@ -65,6 +65,6 @@ module.exports = {
   getById,
   postSale,
   putSale,
-  deleteSale,
   addSalesProducts,
+  deleteSale,
 };

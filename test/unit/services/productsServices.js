@@ -41,3 +41,49 @@ describe('Search all products - Service', () => {
     });
   })
 });
+
+describe('Search product by id', () => {
+
+  before(() => {
+    sinon.stub(ProductsModel, 'getById').resolves([
+        {
+          "id": 2,
+          "name": "Traje de encolhimento",
+          "quantity": 20
+        }
+     ]);
+  });
+  after(() => ProductsModel.getById.restore());
+
+  describe('getById function', async () => {
+
+    it('Id 2 object have correct keys', async () => {
+      const [response] = await service.getProductById(2);
+      expect(response).to.haveOwnProperty('id');
+      expect(response).to.haveOwnProperty('name');
+      expect(response).to.haveOwnProperty('quantity');
+    });
+    it('Check object values', async () => {
+      const [response] = await service.getProductById(2);
+      expect(response.id).to.equal(2);
+      expect(response.name).to.equal('Traje de encolhimento');
+      expect(response.quantity).to.equal(20);
+    });
+  });
+});
+
+describe('Put product', () => {
+
+  describe('Products model empty', async () => {
+
+  before(() => {
+    sinon.stub(ProductsModel, 'getById').resolves();
+  });
+  after(() => ProductsModel.getById.restore());
+
+    it('Return NULL', async () => {
+      const response = await service.putProduct('name', 5, 1);
+      expect(response).to.be.null;
+    });
+  });
+});

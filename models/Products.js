@@ -32,6 +32,7 @@ const postProduct = async (name, quantity) => {
   WHERE name = ?;
   `;
   const [[product]] = await connection.execute(get, [name]);
+  console.log(product);
   return product;
 };
 
@@ -57,7 +58,8 @@ const deleteProduct = async (id) => {
   const deleteQuery = `
   DELETE FROM products WHERE id = ?;
   `;
-  await connection.execute(deleteQuery, [id]);
+  const deleted = await connection.execute(deleteQuery, [id]);
+  return deleted[0];
 };
 
 module.exports = {

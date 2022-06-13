@@ -1,6 +1,6 @@
 const sinon = require('sinon');
 const { expect } = require("chai");
-const { getAll, getById } = require("../../../models/Sales");
+const { getAll, getById, postSale } = require("../../../models/Sales");
 const connection = require('../../../models/connection');
 
 describe('Search all Sales', () => {
@@ -54,6 +54,25 @@ describe('Search Sale by id', () => {
       expect(response.date).to.equal("2022-06-01T18:49:50.000Z");
       expect(response.productId).to.equal(1);
       expect(response.quantity).to.equal(5);
+
     });
   });
+});
+
+describe('Post sale', () => {
+
+  before(() => {
+    sinon.stub(connection, 'execute').resolves([{ insertId: 1 }]);
+  });
+  after(() => connection.execute.restore());
+
+  it('check insert Id', async () => {
+      const insertId = await postSale();
+      expect(insertId).to.equal(1);
+  });
+
+  it('Check type', async () => {
+    const result = await postSale();
+    expect(result).to.be.an('number');
+});
 });

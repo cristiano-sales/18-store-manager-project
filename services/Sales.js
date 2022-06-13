@@ -1,8 +1,7 @@
 const Sales = require('../models/Sales');
 const Products = require('../models/Products');
-
 const {
-  sequelize, sequelizeById, updateQuantity, updateQuantityDelete,
+   sequelize, sequelizeById, updateQuantity, updateQuantityDelete,
 } = require('./utilsService');
 
 const getAllSales = async () => {
@@ -24,21 +23,21 @@ const quantityError = async (salesArray) => {
   let error = false;
   await Promise.all(checkQuantity).then((value) => {
     if (value.includes(false)) error = true;
-}); 
+});
   return error;
 };
 
 const postSale = async (salesArray) => {
   const error = await quantityError(salesArray);
   if (error) return { error };
+
   const id = await Sales.postSale();
   const insertProductsPromises = [];
 
   salesArray.forEach(async ({ productId, quantity }) => {
-    await updateQuantity(quantity, productId);
-    insertProductsPromises.push(Sales.addSalesProducts(id, productId, quantity));      
+      await updateQuantity(quantity, productId);
+      insertProductsPromises.push(Sales.addSalesProducts(id, productId, quantity));      
   });
-
   Promise.all(insertProductsPromises);
   return { id, itemsSold: salesArray };
 };
@@ -57,12 +56,10 @@ const putSale = async (salesArray, id) => {
 const deleteSale = async (id) => {
   const sale = await Sales.getById(id);
   if (sale.length < 1) return null;
-
   sale.forEach(async (_, index) => {
     const { product_id, quantity } = sale[index];
     await updateQuantityDelete(quantity, product_id);
 }); 
-
   await Sales.deleteSale(id);
   return true;
 };
@@ -73,4 +70,5 @@ module.exports = {
   postSale,
   putSale,
   deleteSale,
+  quantityError,
 };
