@@ -68,3 +68,7 @@ module.exports = {
   addSalesProducts,
   deleteSale,
 };
+
+/*
+Arquivos onde iremos executar as operações do banco de dados, como criar conexões e executar queries
+*/

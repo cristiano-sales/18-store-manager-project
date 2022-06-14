@@ -39,3 +39,7 @@ const deleteS = async (req, res) => {
 };
 
 module.exports = { getAll, getById, post, put, deleteS };
+
+/*
+Interface mais próxima da pessoa usuária ou de uma requisição, irá processar e chamar as devidas funções da camada de serviço
+*/

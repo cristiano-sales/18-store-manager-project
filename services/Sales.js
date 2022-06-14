@@ -72,3 +72,7 @@ module.exports = {
   deleteSale,
   quantityError,
 };
+
+/*
+Arquivos onde iremos estruturar nossas regras de negócio, geralmente é quem chama os métodos definidos na camada de modelo
+*/
