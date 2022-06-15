@@ -1,62 +1,55 @@
 const connection = require('./connection');
 
-const getAll = () => {
-  const query = `
-  SELECT * 
-  FROM products;
-  `;
-  return connection.execute(query);
+const getAll = async () => {
+  const result = await connection
+    .execute(
+      `
+        SELECT * FROM StoreManager.products;
+      `,
+    );
+
+  return result;
 };
 
 const getById = async (id) => {
-  const query = `
-  SELECT *
-  FROM products
-  WHERE id = ?;
+  const result = `
+    SELECT * FROM StoreManager.products WHERE id = ?;
   `;
-  const [[product]] = await connection.execute(query, [id]);
+  const [[product]] = await connection.execute(result, [id]);
   if (!product) return null;
 
   return product;
 };
 
 const postProduct = async (name, quantity) => {
-  const query = `
-  INSERT INTO products (name, quantity) VALUE
-    (?, ?);
+  const result = `
+  INSERT INTO StoreManager.products (name, quantity) VALUES (?, ?);
   `;
-  await connection.execute(query, [name, quantity]);
+  await connection.execute(result, [name, quantity]);
   const get = `
-  SELECT *
-  FROM products
-  WHERE name = ?;
+  SELECT * FROM StoreManager.products WHERE name = ?;
   `;
   const [[product]] = await connection.execute(get, [name]);
-  console.log(product);
   return product;
 };
 
 const putProduct = async (name, quantity, id) => {
-  const query = `
-  UPDATE products
-  SET name = ?, quantity = ?
-  WHERE id = ?;
+  const result = `
+  UPDATE StoreManager.products SET name = ?, quantity = ? WHERE id = ?;
   `;
-  await connection.execute(query, [name, quantity, id]);
+  await connection.execute(result, [name, quantity, id]);
 };
 
 const updateQuantity = async (newQuantity, id) => {
-  const query = `
-  UPDATE products
-  SET quantity = ?
-  WHERE id = ?;
+  const result = `
+  UPDATE StoreManager.products SET quantity = ? WHERE id = ?;
   `;
-  await connection.execute(query, [newQuantity, id]);
+  await connection.execute(result, [newQuantity, id]);
 };
 
 const deleteProduct = async (id) => {
   const deleteQuery = `
-  DELETE FROM products WHERE id = ?;
+  DELETE FROM StoreManager.products WHERE id = ?;
   `;
   const deleted = await connection.execute(deleteQuery, [id]);
   return deleted[0];
